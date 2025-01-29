@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using PcPartsStore.Application.Features.PcParts.Commands.CreatePcPart;
 using PcPartsStore.Application.Features.PcParts.Commands.UpdatePcPart;
 using PcPartsStore.Application.Features.PcParts.Queries.GetPartDetail;
 using PcPartsStore.Application.Features.PcParts.Queries.GetPartsList;
@@ -34,6 +35,15 @@ namespace PcPartsStore.Api.Controllers
             var getPartDetailQuery = new GetPartDetailQuery() { Id = id };
 
             return Ok(await _mediator.Send(getPartDetailQuery));
+        }
+
+        [HttpPost("AddPcPart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<CreatePcPartCommandResponse>> AddPcPart([FromBody] CreatePcPartCommand createPcPartCommand)
+        {
+            var response = await _mediator.Send(createPcPartCommand);
+            return Ok(response);
         }
 
         [HttpPut("UpdatePcParts")]

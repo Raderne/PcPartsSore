@@ -96,10 +96,10 @@ namespace PcPartsStore.Persistence
 
         public override Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
-            if (_loggedInUserService == null)
-            {
-                return base.SaveChangesAsync(cancellationToken);
-            }
+            //if (_loggedInUserService == null)
+            //{
+            //    return base.SaveChangesAsync(cancellationToken);
+            //}
 
             foreach (var entry in ChangeTracker.Entries<AuditableEntity>())
             {
@@ -107,11 +107,11 @@ namespace PcPartsStore.Persistence
                 {
                     case EntityState.Added:
                         entry.Entity.Created = DateTime.Now;
-                        entry.Entity.CreatedBy = _loggedInUserService.UserId;
+                        //entry.Entity.CreatedBy = _loggedInUserService.UserId;
                         break;
                     case EntityState.Modified:
                         entry.Entity.LastModified = DateTime.Now;
-                        entry.Entity.LastModifiedBy = _loggedInUserService.UserId;
+                        //entry.Entity.LastModifiedBy = _loggedInUserService.UserId;
                         break;
                 }
             }
