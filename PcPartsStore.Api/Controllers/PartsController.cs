@@ -1,6 +1,7 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using PcPartsStore.Application.Features.PcParts.Commands.CreatePcPart;
+using PcPartsStore.Application.Features.PcParts.Commands.DeletePcPart;
 using PcPartsStore.Application.Features.PcParts.Commands.UpdatePcPart;
 using PcPartsStore.Application.Features.PcParts.Queries.GetPartDetail;
 using PcPartsStore.Application.Features.PcParts.Queries.GetPartsList;
@@ -37,7 +38,7 @@ namespace PcPartsStore.Api.Controllers
             return Ok(await _mediator.Send(getPartDetailQuery));
         }
 
-        [HttpPost("AddPcPart")]
+        [HttpPost(Name = "AddPcPart")]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         public async Task<ActionResult<CreatePcPartCommandResponse>> AddPcPart([FromBody] CreatePcPartCommand createPcPartCommand)
@@ -46,7 +47,7 @@ namespace PcPartsStore.Api.Controllers
             return Ok(response);
         }
 
-        [HttpPut("UpdatePcParts")]
+        [HttpPut(Name = "UpdatePcParts")]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesDefaultResponseType]
@@ -54,6 +55,16 @@ namespace PcPartsStore.Api.Controllers
         {
             await _mediator.Send(updatePcParts);
             return NoContent();
+        }
+
+        [HttpDelete("{id}", Name = "DeletePcPart")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        public async Task<ActionResult<DeletePcPartCommandResponse>> Delete(Guid id)
+        {
+            var getPcPartQuery = new DeletePcPartCommand() { PartId = id };
+            var response = await _mediator.Send(getPcPartQuery);
+            return Ok(response);
         }
     }
 }
